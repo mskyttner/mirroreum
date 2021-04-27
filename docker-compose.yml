@@ -1,0 +1,24 @@
+version: '3.7'
+
+volumes:
+  data_sbdi:
+
+services:
+
+  ide:
+    image: sbdi/mirroreum:latest
+    ports:
+      - "8787:8787"
+    env_file: .Renviron
+    environment: 
+      - ROOT=true
+      - USER=rstudio
+      - PASSWORD=sbdi
+    volumes:
+      - data_sbdi:/root/.config/sbdi
+      - .Renviron:/home/rstudio/.Renviron:ro
+      - ./login.html:/etc/rstudio/login.html:ro
+      - ./rserver.conf:/etc/rstudio/rserver.conf
+      - ./home:/home/rstudio/home
+    command: /init 
+
