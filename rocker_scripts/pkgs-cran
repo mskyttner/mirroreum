@@ -1,0 +1,36 @@
+# generic tooling/infra packages 
+plumber
+configr
+shinydashboard
+flexdashboard
+auth0
+grDevices
+outsider
+
+# general visualization and analysis packages
+tsibble
+plotly
+igraph
+networkD3
+visNetwork
+ggthemes
+mapr
+RColorBrewer
+rworldmap
+maps
+CoordinateCleaner
+
+# biodiversity packages
+sp
+spdep
+wiqid
+raster
+sf
+ncf
+rgbif
+rredlist
+taxize
+swirl
+ape
+phangorn
+seqinr
