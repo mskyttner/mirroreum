@@ -34,3 +34,9 @@ swirl
 ape
 phangorn
 seqinr
+
+# deps in GitHub packages
+cowplot
+picante
+dbscan
+shotGroups

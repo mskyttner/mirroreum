@@ -14,15 +14,30 @@ RUN ./install_shiny_server.sh && \
 	./install_rstudio.sh
 
 # extend existing rocker_scripts
-COPY rocker_scripts/ .
+COPY rocker_scripts/install_tini.sh \
+	rocker_scripts/install_shinytools.sh \
+	rocker_scripts/install_apitools.sh \
+	./
 
 # install extended set of packages	
 RUN ./install_tini.sh && \
 	./install_shinytools.sh && \
 	./install_apitools.sh
 
-# install R packages for biodiversity
+# install R packages from CRAN
+
+COPY rocker_scripts/install_biodiversity.sh \
+	rocker_scripts/pkgs-cran \
+	./
+	
 RUN ./install_biodiversity.sh
+
+# install R packages from GitHub
+
+COPY rocker_scripts/install_sbdi.sh \
+	rocker_scripts/pkgs-github \
+	./
+	
 RUN ./install_sbdi.sh
 
 WORKDIR /

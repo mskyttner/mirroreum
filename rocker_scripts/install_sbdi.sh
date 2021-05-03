@@ -10,4 +10,4 @@ apt-get update && apt-get install -y --no-install-recommends \
 
 cat pkgs-github | grep -v "#" | xargs installGithub.r --deps --update
 
-cat ~/.Renviron | grep -v "GITHUB_PAT" > ~/.Renviron
+#cat ~/.Renviron | grep -v "GITHUB_PAT" > ~/.Renviron
