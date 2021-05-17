@@ -5,7 +5,7 @@ shinydashboard
 flexdashboard
 auth0
 grDevices
-outsider
+#outsider
 
 # general visualization and analysis packages
 tsibble
