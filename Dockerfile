@@ -1,5 +1,5 @@
 # R v 4 + python 3, Tensorflow, tidyverse, devtools, verse (tex and publishing related tools)
-FROM rocker/ml-verse:4.0.2 
+FROM rocker/ml-verse:4.0.3
 
 # environment variables
 ENV SHINY_SERVER_VERSION 1.5.14.948
