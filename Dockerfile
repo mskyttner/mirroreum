@@ -1,8 +1,8 @@
 # R v 4 + python 3, Tensorflow, tidyverse, devtools, verse (tex and publishing related tools)
-FROM rocker/ml-verse:4.0.3
+FROM rocker/ml-verse:4.0.5
 
 # environment variables
-ENV SHINY_SERVER_VERSION 1.5.14.948
+ENV SHINY_SERVER_VERSION 1.5.16.958
 # add GITHUB_PAT due to rate limiting kicking in when installing packages
 ARG GITHUB_PAT= 
 ENV GITHUB_PAT=$GITHUB_PAT
