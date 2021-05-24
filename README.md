@@ -23,9 +23,9 @@ example general purpose packages from
 
 Running locally requires that you have support for running containers,
 for example using [Docker Community
-Edition](https://docs.docker.com/v17.09/engine/installation/). Depending
-on your base operating system, installation procedures differ but are
-well documented online.
+Edition](https://docs.docker.com/engine/install/). Depending on your
+base operating system, installation procedures differ but are well
+documented online.
 
 Once you have `docker` installed, you can download and run `mirroreum`
 locally using the following commands, provided you have `docker` and
@@ -40,13 +40,13 @@ cd mirroreum
 make start-ide
 ```
 
-This will download about \~ 4 GB of data, representing the
-`mskyttner/mirroreum` Docker Image.
+This will download and start a container, representing an instance of
+the `mskyttner/mirroreum` Docker Image.
 
 The `make start-ide` will run the statements in the Makefile that starts
 the web-based RStudio Web Open Source Edition.
 
-Use credentials for user/login: `rstudio/sbdi` when logging in.
+Use credentials for user/login: `rstudio/mirroreum` when logging in.
 
 Strictly speaking the `make` and `git` tools are not needed to launch
 the container, but the Makefile contains a target called “`start-ide`”
@@ -61,11 +61,11 @@ can run directly if you prefer (without requiring `git` or `make`):
 docker run -d --name mywebide \
     --env ROOT=TRUE \
     --env USERID=$(id -u) \
-    --env PASSWORD=sbdi \
+    --env PASSWORD=mirroreum \
     --publish 8787:8787 \
     --volume $(pwd)/home:/home/rstudio \
     --volume $HOME/.Renviron:/home/rstudio/.Renviron \
-    mskyttner/mirroreum /init
+    sbdi/mirroreum /init
 ```
 
 Note that this command assumes several things:
@@ -101,7 +101,6 @@ browser to it with these CLI commands:
 ``` bash
 # start mirroreum services to run the RStudio Open Source Web Edition
 # mount your .Renviron file with the environment variables into the container... 
-# use DBHOST, DBNAME, DBUSER and DBPASS to define your MS SQL Server connection credentials
 
 docker run -d --name mywebide \
     --env ROOT=TRUE \
@@ -110,7 +109,7 @@ docker run -d --name mywebide \
     --publish 8787:8787 \
     --volume $(pwd)/home:/home/rstudio \
     --volume ~/.Renviron:/home/rstudio/.Renviron \
-    mskyttner/mirroreum /init
+    sbdi/mirroreum /init
 
 # after a couple of seconds, use login rstudio:mirroreum
 firefox http://localhost:8787 &
@@ -136,7 +135,7 @@ docker run -d --name mywebide \
     -e PASSWORD=yourpasswordhere \
     -v $(pwd)/foo:/home/$USER/foo \
     -w /home/$USER/foo \
-    mskyttner/mirroreum /init
+    sbdi/mirroreum /init
 ```
 
 Available options are documented in more detail
@@ -157,13 +156,10 @@ something like this:
         # if you want to time the build, use...
         time make
 
-This takes around 19 minutes on a modern laptop.
+This takes around 10-20 minutes on a modern laptop (and also when the
+GitHub Action runs).
 
-Use `docker images | grep mirroreum` to inspect the resulting image, its
-total size is around 7 GB uncompressed, and around 4 GB compressed
-(which is what is downloaded from [Docker
-Hub](https://hub.docker.com/r/sbdi) if just issuing `make start-ide` and
-not building from source).
+Use `docker images | grep mirroreum` to inspect the resulting image.
 
 ## Non-interactive usage
 
@@ -187,7 +183,7 @@ to use `/usr/bin/shiny-server.sh`:
 ``` bash
 docker run -d --name myshinyapp \
     -p 3838:3838 \
-    mskyttner/mirroreum /usr/bin/shiny-server.sh
+    sbdi/mirroreum /usr/bin/shiny-server.sh
 
 firefox http://localhost:3838 &
 ```
@@ -204,7 +200,7 @@ present working directory as the Shiny app directory.
 docker run -d --name myshinyapp \
     -p 3838:3838 \
     -v $(pwd)/:/srv/shiny-server/ \
-    mskyttner/mirroreum /usr/bin/shiny-server.sh
+    sbdi/mirroreum /usr/bin/shiny-server.sh
 
 firefox http://localhost:3838 &
 ```

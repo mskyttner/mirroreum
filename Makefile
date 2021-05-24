@@ -20,7 +20,7 @@ start-ide:
 	docker run -d --name mywebide \
 		--env ROOT=true \
 		--env USER=rstudio \
-		--env PASSWORD=mirroreum \
+		--env PASSWORD=sbdi \
 		--env USERID=$$(id -u) \
 		--env GROUPID=$$(id -g) \
 		--publish 8787:8787 \
