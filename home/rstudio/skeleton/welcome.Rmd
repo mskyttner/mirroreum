@@ -1,0 +1,136 @@
+---
+title: "Introduction"
+author: "BioAtlas Sweden"
+date: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Accessing data from BioAtlas Sweden 2
+
+To retrieve data from BioAtlas Sweden's data portal, the ALA4R package can be used. 
+
+Let's illustrate how to do this through some examples.
+
+To begin with, lets say that we are interested in studying occurrences of berries that are spread by birds - such as "Prunus avium" - sweet cherries. 
+
+## How many cherries are there?
+
+We start by getting a total record count given the latin name "Prunus avium".
+
+```{r}
+library(ALA4R)
+
+binomen <-  "Prunus avium"
+n_records <- occurrences(taxon = binomen, record_count_only = TRUE, use_layer_names = FALSE)
+message("Total record cound for ", binomen, " is ", n_records)
+```
+
+How is the ALA4R package configured to use specifically data by default sourced from BioAtlas Sweden? The answer is that in the "Mirroreum" environment, researchers with an account have default settings pointing ALA4R to use the BioAtlas Sweden data portal.
+
+Technically, this has been set up in settings file which is called `.Rprofile` which is located in the home directory of the researcher. This file can be changed, if need be, by the researcher, to point to any other public data portal elsewhere in Europe or Australia that is running the "Atlas of Living Australia" free and open source software in their data portals.
+
+## Occurrence records
+
+To retrieve the occurrence records we can do this:
+
+```{r, message=FALSE}
+
+library(tidyverse)
+library(DT)
+
+df <- occurrences(taxon = binomen, 
+  download_reason_id = 10, use_layer_names = FALSE)
+
+# inspect the occurrence data as text table
+occ <- head(df$data, 100)
+as_tibble(occ)
+
+# ...or as HTML table with just a few of the relevant columns
+
+cherries_df <- occ %>% 
+  select(catalogNumber, institutionCode, collectionCode, locality)
+
+datatable(cherries_df)
+
+```
+
+To see metadata related to the dataset and understand how to reference and quote it, we can do this:
+
+```{r, message=FALSE}
+meta <- as_tibble(df$meta)
+meta
+
+# show citation info
+citation <- as_tibble(meta$Name, meta$Citation)
+datatable(citation)
+```
+
+## More examples
+
+If you wish you can define your own list of species and automate the lookup of the total number of records for each. 
+
+The example below illustrates this:
+
+```{r, }
+
+library(purrr)
+library(ggplot2)
+
+species_list <- c(
+  "Prunus padus",  # hägg
+  "Sorbus aucuparia",  # rönn
+  "Viburnum opulus"  # olvon
+  )
+
+n_bioatlas <- function(binomen) {
+  
+  n <- occurrences(taxon = binomen, 
+    record_count_only = TRUE, use_layer_names = FALSE)
+  
+  res <- tibble(species = binomen, n = n)
+  
+  return (res)
+}
+
+comparison_n <- map_df(species_list, n_bioatlas)
+
+ggplot(data = comparison_n, aes(x = species, y = n)) + 
+  geom_bar(color = "darkgreen", stat = "identity")
+
+
+```
+
+You can use this technique for record count comparisons of say various invasive species in a similar way:
+
+
+```{r pressure, echo=FALSE}
+
+invasive_species <- c(
+  "Heracleum mantegazzianum",  # jäteloka
+  "Impatiens parviflora",  # blekbalsamin
+  "Rosa rugosa",  # vresror
+  "Lupinus polyphyllus",  # lupin
+  "Neovison vison",  # mink
+  "Nyctereutes procyonoides",  # mårdhund
+  "Pacifastacus leniusculus",  # signalkräfta
+  "Arion vulgaris"  # mördarsnigel
+)
+
+invasives_n <- map_df(invasive_species, n_bioatlas)
+
+ggplot(data = invasives_n, aes(x = species, y = n)) + 
+  geom_bar(color = "darkgreen", stat = "identity") + 
+  coord_flip()
+
+
+```
+
+Now, some further ideas of topics to study:
+
+How would you create some reproducible open research work that studies the hypothesis whether the known presence of `Ranunculus glacialis` changes by moving up the mountains when the climate gets warmer?
+
+Are there any signs that `Heracleum mantegazzianum` - Jätteloka is the Swedish vernacular name - is increasing again?

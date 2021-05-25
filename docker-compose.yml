@@ -19,6 +19,6 @@ services:
       - .Renviron:/home/rstudio/.Renviron:ro
       - ./login.html:/etc/rstudio/login.html:ro
       - ./rserver.conf:/etc/rstudio/rserver.conf
-      - ./home:/home/rstudio/home
+      - ./home/rstudio:/home/rstudio
     command: /init 
 
