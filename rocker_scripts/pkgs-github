@@ -3,10 +3,10 @@
 #antonellilab/gaius
 #ropensci/restez
 #ropensci/phylotaR
-#Greensway/BIRDS requires sp 1.4.4 "but 1.4-2 already installed"
-#Greensway/BIRDS
+Greensway/BIRDS
 fschirr/VirSysMon
 azizka/sampbias
 azizka/speciesgeocodeR
 AtlasOfLivingAustralia/ALA4R
-biodiversitydata-se/SBDI4R@v.1.0.0
+AtlasOfLivingAustralia/galah@v1.1.0
+biodiversitydata-se/SBDI4R@v.1.0.0a

@@ -8,6 +8,7 @@ grDevices
 #outsider
 
 # general visualization and analysis packages
+DT
 tsibble
 plotly
 igraph
@@ -40,3 +41,5 @@ cowplot
 picante
 dbscan
 shotGroups
+jpeg
+phytools

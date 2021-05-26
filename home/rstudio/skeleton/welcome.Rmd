@@ -1,6 +1,6 @@
 ---
 title: "Introduction"
-author: "BioAtlas Sweden"
+author: "Swedish Biodiversity Data Infrastructure"
 date: ""
 output: html_document
 ---
@@ -9,9 +9,34 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Accessing data from BioAtlas Sweden 2
+# Accessing data from SBDI
 
-To retrieve data from BioAtlas Sweden's data portal, the ALA4R package can be used. 
+To retrieve data from the Swedish Biodiversity Data Infrastructure, the SBDI4R package can be used. 
+
+To learn more about using the SBDI4R package, please look at the vignette:
+
+https://biodiversitydata-se.github.io/SBDI4R
+
+![](https://biodiversitydata.se/wp-content/uploads/2021/02/sbdi-logo-orginal-large.png)
+
+Besides the SBDI4R package, please look at these SBDI web resources:
+
+- https://biodiversitydata.se/
+- https://tools.biodiversitydata.se/
+- https://docs.biodiversitydata.se/
+
+These resources may be of interest too:
+
+- Sensitive Data service: https://sds.biodiversitydata.se/
+- API documentation webapp: https://api.biodiversitydata.se/
+- Dashboard: https://dashboard.biodiversitydata.se/
+- Regions webapp: https://regions.biodiversitydata.se
+- Molecular data: https://molecular.biodiversitydata.se/
+- Biocollect: http://biocollect.biodiversitydata.se/
+- Ecodata: https://ecodata.biodiversitydata.se/documentation/index
+
+
+# Quick examples of SBDI4R usage
 
 Let's illustrate how to do this through some examples.
 
@@ -22,16 +47,17 @@ To begin with, lets say that we are interested in studying occurrences of berrie
 We start by getting a total record count given the latin name "Prunus avium".
 
 ```{r}
-library(ALA4R)
+library(SBDI4R)
 
 binomen <-  "Prunus avium"
-n_records <- occurrences(taxon = binomen, record_count_only = TRUE, use_layer_names = FALSE)
+
+n_records <- occurrences(
+  taxon = binomen, 
+  email = "sbdi4r-test@biodiversitydata.se",
+  record_count_only = TRUE, use_layer_names = FALSE)
+
 message("Total record cound for ", binomen, " is ", n_records)
 ```
-
-How is the ALA4R package configured to use specifically data by default sourced from BioAtlas Sweden? The answer is that in the "Mirroreum" environment, researchers with an account have default settings pointing ALA4R to use the BioAtlas Sweden data portal.
-
-Technically, this has been set up in settings file which is called `.Rprofile` which is located in the home directory of the researcher. This file can be changed, if need be, by the researcher, to point to any other public data portal elsewhere in Europe or Australia that is running the "Atlas of Living Australia" free and open source software in their data portals.
 
 ## Occurrence records
 
@@ -43,6 +69,7 @@ library(tidyverse)
 library(DT)
 
 df <- occurrences(taxon = binomen, 
+  email = "sbdi4r-test@biodiversitydata.se",
   download_reason_id = 10, use_layer_names = FALSE)
 
 # inspect the occurrence data as text table
@@ -52,7 +79,7 @@ as_tibble(occ)
 # ...or as HTML table with just a few of the relevant columns
 
 cherries_df <- occ %>% 
-  select(catalogNumber, institutionCode, collectionCode, locality)
+  select(catalogueNumber, institutionCode, collectionCode, locality)
 
 datatable(cherries_df)
 
@@ -86,9 +113,10 @@ species_list <- c(
   "Viburnum opulus"  # olvon
   )
 
-n_bioatlas <- function(binomen) {
+n_sbdi <- function(binomen) {
   
   n <- occurrences(taxon = binomen, 
+    email = "sbdi4r-test@biodiversitydata.se",
     record_count_only = TRUE, use_layer_names = FALSE)
   
   res <- tibble(species = binomen, n = n)
@@ -96,7 +124,7 @@ n_bioatlas <- function(binomen) {
   return (res)
 }
 
-comparison_n <- map_df(species_list, n_bioatlas)
+comparison_n <- map_df(species_list, n_sbdi)
 
 ggplot(data = comparison_n, aes(x = species, y = n)) + 
   geom_bar(color = "darkgreen", stat = "identity")
@@ -120,7 +148,7 @@ invasive_species <- c(
   "Arion vulgaris"  # mördarsnigel
 )
 
-invasives_n <- map_df(invasive_species, n_bioatlas)
+invasives_n <- map_df(invasive_species, n_sbdi)
 
 ggplot(data = invasives_n, aes(x = species, y = n)) + 
   geom_bar(color = "darkgreen", stat = "identity") + 
