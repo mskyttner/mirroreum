@@ -6,7 +6,7 @@ volumes:
 services:
 
   ide:
-    image: sbdi/mirroreum:latest
+    image: ghcr.io/mskyttner/mirroreum
     ports:
       - "8787:8787"
     env_file: .Renviron
