@@ -23,7 +23,7 @@ usermigrate <- function(
     home, user, user, home
   )
   
-  paste0(useradd, " || ", update)
+  paste0(useradd, " \n ", update)
 }
 
 
