@@ -8,6 +8,6 @@ apt-get update && apt-get install -y --no-install-recommends \
 
 # packages used in SBDI
 
-cat pkgs-github | grep -v "#" | xargs installGithub.r --deps TRUE --update
+cat pkgs-github | grep -v "#" | xargs installGithub.r --deps TRUE 
 
 #cat ~/.Renviron | grep -v "GITHUB_PAT" > ~/.Renviron
